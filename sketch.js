@@ -8,6 +8,7 @@ let board;
 let currentPlayer;
 let numEmpty;
 let isPlaying;
+let winner;
 
 function setup() {
   createCanvas(400, 400);
@@ -16,10 +17,13 @@ function setup() {
   newBoard();
   currentPlayer = "X";
   isPlaying = true;
+  winner = "";
 }
 
 function draw() {
   // clear the background
+  strokeWeight(1);
+  stroke(0,0,0);
   background(220);
   fill(220);
   
@@ -32,7 +36,13 @@ function draw() {
   // draw the moves
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
+      strokeWeight(1);
+      stroke(0,0,0);
       if (getCell(col, row) == "X") {
+        if (winner == "X") {
+          strokeWeight(10);
+          stroke(255,0,0);
+        }
         // draw an "X"
         let x = col * cw + cw / 2;
         let y = row * rh + rh / 2;
@@ -40,6 +50,10 @@ function draw() {
         line(x - d / 2, y - d / 2, x + d / 2, y + d / 2);
         line(x + d / 2, y - d / 2, x - d / 2, y + d / 2);
       } else if (getCell(col, row) == "O") {
+        if (winner == "O") {
+          strokeWeight(10);
+          stroke(255,255,0);
+        }
         // draw an "O"
         let x = col * cw + cw / 2;
         let y = row * rh + rh / 2;
@@ -68,9 +82,10 @@ function mouseClicked() {
   setCell(col, row, currentPlayer);
   
   // is the game over?
-  if (checkWinner() != null) {
+  winner = checkWinner();
+  if (winner != null) {
     isPlaying = false;
-    console.log("Player " + currentPlayer + " won!");
+    // console.log("Player " + currentPlayer + " won!");
     return;
   }
   
